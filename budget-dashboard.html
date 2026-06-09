@@ -168,7 +168,7 @@
 <div class="header">
   <div>
     <div class="header-title">תיק <span>פיננסי</span> – אמיר &amp; ניצן</div>
-    <div class="header-sub">עדכון אחרון: 27/04/2026 (ניהול יתרות) | 27/04/2026 (פנסיה) | 05/05/2026 (IB)</div>
+    <div class="header-sub" id="header-sub">עדכון אחרון: טוען...</div>
   </div>
   <div class="header-right">
     <span class="last-update" id="nowDate"></span>
@@ -672,6 +672,16 @@ async function loadAllData(){
     renderPenTab(penRows);
     renderIbTab(ibRows);
 
+    // ── Update header with last-row dates from each sheet ──
+    const headerSub = document.getElementById('header-sub');
+    if (headerSub) {
+      const parts = [];
+      if (window._balDate) parts.push(`${window._balDate} (ניהול יתרות)`);
+      if (window._penDate) parts.push(`${window._penDate} (פנסיה)`);
+      if (window._ibDate)  parts.push(`${window._ibDate} (IB)`);
+      headerSub.textContent = parts.length ? `עדכון אחרון: ${parts.join(' | ')}` : 'עדכון אחרון: –';
+    }
+
     // ── kpi-total-all: liquid + pension + IB in ILS ──
     const _el = id => document.getElementById(id);
     const todayRate = getRateForDate(new Date().toISOString().slice(0,10));
@@ -726,6 +736,7 @@ function renderBalTab(rows){
 
   const el = id => document.getElementById(id);
   const rate = getRateForDate(latest[0]);
+  window._balDate = latest[0];
 
   // ── KPI cards ──
   if(el('kpi-liquid'))       el('kpi-liquid').textContent       = fmt(totalConv);
@@ -863,6 +874,7 @@ function renderPenTab(rows){
 
   // Update KPI cards
   const el = id => document.getElementById(id);
+  window._penDate = latest[0];
   if(el('kpi-pen-nitzan'))  el('kpi-pen-nitzan').textContent  = fmt(totalNitzan);
   if(el('kpi-pen-amir'))    el('kpi-pen-amir').textContent    = fmt(totalAmir);
   if(el('kpi-pen-total'))   el('kpi-pen-total').textContent   = fmt(totalAll);
@@ -1048,6 +1060,7 @@ function renderIbTab(rows) {
 
   // Store globally so the main-page KPI card stays in sync
   window._latestIB = latestVal;
+  window._ibDate = latestDate;
   const _el = id => document.getElementById(id);
   if(_el('kpi-ib-val'))  _el('kpi-ib-val').textContent  = fmtUSD(latestVal);
   if(_el('kpi-ib-ils'))  _el('kpi-ib-ils').textContent  = `≈ ${fmt(latestILS)}`;
