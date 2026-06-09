@@ -10,6 +10,7 @@ backend.py – שרת Flask + Playwright לשליפת יתרות מחברות ב
 from flask import Flask, request, jsonify, send_from_directory, Response
 from flask_cors import CORS
 from playwright.sync_api import sync_playwright, TimeoutError as PwTimeout
+import os
 import threading
 import uuid
 import time

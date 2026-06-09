@@ -55,9 +55,20 @@ The app reads data from a Google Sheet. To use your own sheet:
 | Migdal | מגדל |
 | Harel | הראל |
 
+## Deployment (Vercel)
+
+The frontend can be deployed as a static site on [Vercel](https://vercel.com):
+
+1. Connect this repository to a Vercel project
+2. No build command is needed — Vercel serves the static files directly
+3. The `vercel.json` config rewrites `/` to `budget-dashboard.html`
+
+The backend must be run separately (locally or on a server that supports Python/Playwright).
+
 ## Tech Stack
 
 - **Backend:** Python, Flask, Playwright
 - **Frontend:** Vanilla HTML/CSS/JS, Chart.js
 - **Data:** Google Sheets (CSV export API)
+- **Hosting:** Vercel (static frontend)
 - **PWA:** installable on mobile via manifest + service worker
